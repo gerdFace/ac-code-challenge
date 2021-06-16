@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class AppModule {
+object AppModule {
 
     @Provides
     fun provideBaseUrl() = BuildConfig.BASE_URL
