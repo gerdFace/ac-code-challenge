@@ -10,6 +10,7 @@ interface ListFlyService {
     @GET("contacts")
     suspend fun getContactsByName(
         @Query(value = "order[name]", encoded = true) sortBy: String,
+        @Query(value = "limit") limit: Int = 50,
         @Query("search") searchParameter: String
     ): ContactsResponse
 }

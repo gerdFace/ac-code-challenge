@@ -6,12 +6,13 @@ import kotlinx.coroutines.withContext
 abstract class BaseService {
 
     // TODO: Add custom error handling
-    suspend fun <T> makeApiCall(dispatcher: CoroutineDispatcher, call: suspend () -> T): Result<T> {
+    // TODO: Handle pagination
+    suspend fun <T> makeApiCall(dispatcher: CoroutineDispatcher, call: suspend () -> T): ApiResult<T> {
         return withContext(dispatcher) {
             try {
-                Result.Success(call.invoke())
+                ApiResult.Success(call.invoke())
             } catch (e: Exception) {
-                Result.Error(e)
+                ApiResult.Error(e)
             }
         }
     }
