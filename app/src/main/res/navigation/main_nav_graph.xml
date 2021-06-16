@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/contact_search_fragment"
-        android:name="com.example.accodechallenge.screens.main.ContactSearchFragment"
+        android:name="com.example.accodechallenge.screens.main.ContactsSearchFragment"
         android:label="ContactSearchFragment"
-        tools:layout="@layout/fragment_contact_search" />
+        tools:layout="@layout/fragment_contacts_search" />
 </navigation>
