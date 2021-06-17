@@ -14,11 +14,12 @@ import com.example.accodechallenge.R
 import com.example.accodechallenge.databinding.FragmentContactsSearchBinding
 import com.example.accodechallenge.screens.common.RecyclerDecoration
 import com.example.accodechallenge.screens.common.SingleLineTextAdapter
+import com.example.accodechallenge.util.tryHideKeyboardIfVisible
 
 class ContactsSearchFragment : Fragment() {
 
-    lateinit var binding: FragmentContactsSearchBinding
-    lateinit var adapter: SingleLineTextAdapter
+    private lateinit var binding: FragmentContactsSearchBinding
+    private lateinit var adapter: SingleLineTextAdapter
     val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -30,6 +31,7 @@ class ContactsSearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         adapter = SingleLineTextAdapter()
         viewModel.watchNameEmailList().observe(viewLifecycleOwner, { adapter.setTextItems(it) })
         binding.contactRecycler.apply {
@@ -44,6 +46,16 @@ class ContactsSearchFragment : Fragment() {
             )
         }
 
-        lifecycleScope.launchWhenCreated { viewModel.searchForContacts() }
+        binding.searchButton.setOnClickListener {
+            requireActivity().tryHideKeyboardIfVisible()
+            val searchString = binding.searchEditText.text.toString()
+            val isValid = viewModel.validateSearchString(searchString)
+            if (!isValid) {
+                binding.searchInputLayout.error = getString(R.string.enter_a_name)
+            } else {
+                binding.searchInputLayout.error = null
+                lifecycleScope.launchWhenCreated { viewModel.searchForContacts(searchString) }
+            }
+        }
     }
 }

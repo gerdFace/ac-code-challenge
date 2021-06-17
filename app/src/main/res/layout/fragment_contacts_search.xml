@@ -13,30 +13,72 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/std_spacing"
+        android:animateLayoutChanges="true">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/std_spacing"
+            android:layout_marginTop="@dimen/lg_spacing"
+            android:layout_marginEnd="@dimen/std_spacing"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:errorTextColor="@color/error_font_color"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/search_contact_name"
+                android:imeOptions="actionDone"
+                android:inputType="textNoSuggestions"
+                android:textColor="@color/primary_dark_font_color"
+                android:textColorHint="@color/disabled_gray_color" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/std_spacing"
+            android:layout_marginEnd="@dimen/std_spacing"
+            android:enabled="@{!viewModel.watchIsLoading()}"
+            android:text="@string/search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_input_layout" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contact_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/lg_spacing"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/std_spacing"
             android:visibility="@{!viewModel.watchIsLoading() ? View.VISIBLE : View.GONE}"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/search_button"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_bar"
             android:layout_width="@dimen/progress_bar_size"
             android:layout_height="@dimen/progress_bar_size"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/lg_spacing"
+            android:layout_marginTop="@dimen/std_spacing"
             android:indeterminate="true"
-            android:visibility="@{viewModel.watchIsLoading() ? View.VISIBLE : View.GONE}"
-            app:indicatorColor="@color/primary_color"
+            android:visibility="@{viewModel.watchIsLoading() ? View.VISIBLE : View.GONE, default=gone}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_button"
             app:trackCornerRadius="10dp"
             app:trackThickness="4dp" />
 
@@ -48,9 +90,21 @@
             android:textColor="@color/error_font_color"
             android:textSize="@dimen/lg_text"
             android:textStyle="bold"
-            android:visibility="@{viewModel.watchHasError() ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.watchHasError() ? View.VISIBLE : View.GONE, default=gone}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/search_button" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/std_spacing"
+            android:text="@string/no_results"
+            android:textColor="@color/primary_dark_font_color"
+            android:textSize="@dimen/lg_text"
+            android:visibility="@{!viewModel.watchHasError() &amp;&amp; !viewModel.watchIsLoading() &amp;&amp; viewModel.watchNameEmailList().empty ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

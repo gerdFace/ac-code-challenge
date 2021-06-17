@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Contacts(
-    @Json(name = "cdate") val cDate: String,
+    @Json(name = "cdate") val cDate: String?,
     val email: String,
     val phone: String,
     val firstName: String,

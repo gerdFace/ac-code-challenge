@@ -13,12 +13,14 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(val listFlyServiceWrapper: ListFlyServiceWrapper) : ViewModel() {
 
-    private val isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
+    private val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     private val hasError: MutableLiveData<Boolean> = MutableLiveData(false)
     private val contactsList: MutableLiveData<List<Contacts>> = MutableLiveData()
 
     fun watchIsLoading(): LiveData<Boolean> = isLoading
+
     fun watchHasError(): LiveData<Boolean> = hasError
+
     fun watchNameEmailList(): LiveData<List<String>> = Transformations.map(contactsList) { contactsList ->
         contactsList.mapNotNull { contacts ->
             if (contacts.firstName.isNotBlank() && contacts.lastName.isNotBlank()) {
@@ -31,10 +33,17 @@ class MainViewModel @Inject constructor(val listFlyServiceWrapper: ListFlyServic
         }
     }
 
-    fun searchForContacts(name: String = "Test") {
+    // TODO sanitize search parameter before sending?
+    fun validateSearchString(searchParameter: String): Boolean {
+        return searchParameter.isNotBlank()
+    }
+
+    fun searchForContacts(searchParameter: String) {
         isLoading.value = true
+
         viewModelScope.launch {
-            val result = listFlyServiceWrapper.getContactsByName(searchParameter = name)
+            val result = listFlyServiceWrapper.getContactsByName(searchParameter = searchParameter)
+            isLoading.value = false
             when (result) {
                 is ApiResult.Success -> {
                     contactsList.value = result.data.contacts
@@ -44,7 +53,6 @@ class MainViewModel @Inject constructor(val listFlyServiceWrapper: ListFlyServic
                     hasError.value = true
                 }
             }.exhaustive
-            isLoading.value = false
         }
     }
 }

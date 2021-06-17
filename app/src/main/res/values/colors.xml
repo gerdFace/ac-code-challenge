@@ -6,6 +6,7 @@
     <color name="secondary_variant_color">#139879</color>
     <color name="primary_light_font_color">#EDFAFF</color>
     <color name="primary_dark_font_color">#5B6770</color>
+    <color name="disabled_gray_color">#AAAAAA</color>
     <color name="error_font_color">#B51F1F</color>
     <color name="light_gray_color">#C4C4C4</color>
     <color name="black">#FF000000</color>
