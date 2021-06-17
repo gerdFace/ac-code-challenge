@@ -3,7 +3,7 @@
 
     <string name="generic_error">Oops! An Error Occurred!</string>
     <string name="search_contact_name">Search contact name</string>
-    <string name="no_results">Search returned no results</string>
+    <string name="no_results">No results found</string>
     <string name="search">Search</string>
     <string name="enter_a_name">Enter a name</string>
 </resources>
